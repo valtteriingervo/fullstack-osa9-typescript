@@ -53,10 +53,42 @@ const calculateExercises = (trainingHours: Array<Number>, target: number): Resul
   }
 }
 
-// Model input from 9.1
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
-// Very low high target
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 10))
-// Very low target
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 0.2))
+
+const parseArguments = (args: Array<string>): Array<number> => {
+  // npm run calculateExercises 2 1 0 2 4.5 0 3 1 0 4
+  // arg[0] => run
+  // arg[1] => calculateExercises
+  // arg[2] => 2 (the target)
+  // arg[3 ...] => 1 0 2 4.5 0 3 1 0 4 (the training hours per day)
+  if (args.length < 3) throw new Error('No target hours or training hours per day provided');
+  if (args.length < 4) throw new Error('Only target hours provided. Give also the training hours per day.');
+  if (args.length < 5) throw new Error('Training period must be longer than one day');
+
+  const nonNumberArgs = args.slice(2).filter(arg => isNaN(Number(arg)))
+
+  if (nonNumberArgs.length <= 0) {
+    // Remove the first two arguments "run" and "calculatedExercises" and map the input strings to numbers
+    return args.slice(2).map(arg => Number(arg))
+  } else {
+    throw new Error('One ore more of the provided values were not numbers!');
+  }
+}
+
+try {
+  const targetAndTrainingHours = parseArguments(process.argv);
+  const target = targetAndTrainingHours[0]
+  const trainingHours = targetAndTrainingHours.slice(1)
+
+  console.log(calculateExercises(trainingHours, target))
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message
+  }
+  console.log(errorMessage)
+}
+
+// Let TS know that this is a module
+// and avoid adding this files declarations to the global scope
+export { }
 
