@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,

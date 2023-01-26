@@ -24,18 +24,32 @@ app.get('/bmi', (req, res) => {
 });
 
 // Waypoint for the Exercise Calculator
-// TO-DO: Add error handling and parameter validation
 app.post('/exercises', (req, res) => {
   console.log(req.body);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { daily_exercises, target } = req.body;
 
-  console.log(daily_exercises);
-  console.log(target);
+  // Check that both parameters are in the body with a value
+  // eslint-disable-next-line
+  if (!daily_exercises || !target) {
+    return res.status(400).send({ error: 'parameters missing' });
+  }
+  // Check that daily_exercises is typeof Array
+  if (!Array.isArray(daily_exercises)) {
+    return res.status(400).send({ error: 'malformatted parameters' });
+  }
 
-  // TO-DO: Can we get rid of the ESlint disable rule below
+  // Check that parameters contain only numbers
+  // eslint-disable-next-line
+  const checkForNaN = daily_exercises.filter(n => isNaN(n))
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (isNaN(Number(target)) || checkForNaN.length > 0) {
+    return res.status(400).send({ error: 'malformatted parameters' });
+  }
+
+  // We now know that daily_exercises is type number[] and target is type number
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  res.json(calculateExercises(daily_exercises, Number(target)));
+  return res.json(calculateExercises(daily_exercises, Number(target)));
 });
 
 const PORT = 3003;
