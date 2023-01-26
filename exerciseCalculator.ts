@@ -8,7 +8,7 @@ interface Result {
   average: number
 }
 
-const calculateExercises = (trainingHours: Array<number>, target: number): Result => {
+export const calculateExercises = (trainingHours: Array<number>, target: number): Result => {
   // Period length is simply the array size
   const periodLength = trainingHours.length;
   // Filter out days that have 0 training hours
