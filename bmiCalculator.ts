@@ -18,11 +18,11 @@ const parseArguments = (args: Array<string>): HeightAndWeight => {
 }
 
 // Ranges according to Hospital Authority of Hong Kong
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const bmi = weight / Math.pow(height / 100, 2)
   console.log('BMI', bmi)
   if (bmi < 18.5) {
-    return 'Undeweight (Unhealthy)'
+    return 'Underweight (Unhealthy)'
   } else if (18.5 <= bmi && bmi <= 22.9) {
     return 'Normal range (Healthy)'
   } else if (23.0 <= bmi && bmi <= 24.9) {
@@ -47,4 +47,4 @@ try {
 
 // Let TS know that this is a module
 // and avoid adding this files declarations to the global scope
-export { }
+export { calculateBmi as bmiCalculator }
