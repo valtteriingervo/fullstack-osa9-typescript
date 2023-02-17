@@ -2,9 +2,9 @@ POST http://localhost:3001/api/patients
 content-type: application/json
 
 {
-  "name": "Jay Loder",
-  "dateOfBirth": "1999-05-07",
-  "ssn": "510776-698B",
+  "name": "Max Verstappen",
+  "dateOfBirth": "1989-9-02",
+  "ssn": "38921-222J",
   "gender": "male",
-  "occupation": "Plumber"
+  "occupation": "Formula driver"
 }

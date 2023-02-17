@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-// Ignore the rules for exercise 9.12
-// We will set up parsing and enable the rules again in 9.13
-
 import express from "express";
 import patientService from "../services/patientService";
 
