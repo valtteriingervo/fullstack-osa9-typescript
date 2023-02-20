@@ -1,3 +1,30 @@
+// CoursePart intercaes
+interface CoursePartBase {
+  name: string;
+  exerciseCount: number;
+}
+
+interface CoursePartBaseDesc extends CoursePartBase {
+  description: string;
+}
+
+interface CoursePartBasic extends CoursePartBaseDesc {
+  kind: "basic"
+}
+
+interface CoursePartGroup extends CoursePartBase {
+  groupProjectCount: number;
+  kind: "group"
+}
+
+interface CoursePartBackround extends CoursePartBaseDesc {
+  backroundMaterial: string;
+  kind: "background"
+}
+
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackround;
+
+// Prop interfaces
 interface HeaderProps {
   name: string
 }
@@ -7,30 +34,77 @@ const Header = (props: HeaderProps) => {
 };
 
 // This interface is shared by Content and Total components
-interface PartProps {
-  parts: Array<{
-    name: string,
-    exerciseCount: number
-  }>
+interface PartsProps {
+  parts: CoursePart[]
 }
 
-const Content = ({ parts }: PartProps) => {
+interface PartProps {
+  course: CoursePart
+}
+
+/**
+ * Helper function for exhaustive type checking
+ */
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
+const Part = ({ course }: PartProps) => {
+  switch (course.kind) {
+    case "basic":
+      return (
+        <div>
+          <p>
+            <b>{course.name} {course.exerciseCount}</b>
+            <br></br>
+            <i>{course.description} </i>
+          </p>
+        </div>
+      )
+    case "group":
+      return (
+        <div>
+          <p>
+            <b>{course.name} {course.exerciseCount}</b>
+            <br></br>
+            {"Project exercises: "}{course.groupProjectCount}
+          </p>
+        </div>
+      )
+    case "background":
+      return (
+        <div>
+          <p>
+            <b>{course.name} {course.exerciseCount}</b>
+            <br></br>
+            <i>{course.description} </i>
+            <br></br>
+            {"submit to: "} {course.backroundMaterial}
+          </p>
+        </div>
+      )
+    default:
+      return assertNever(course);
+  }
+};
+
+const Content = ({ parts }: PartsProps) => {
   return (
     <>
-      <p>
-        {parts[0].name} {parts[0].exerciseCount}
-      </p>
-      <p>
-        {parts[1].name} {parts[1].exerciseCount}
-      </p>
-      <p>
-        {parts[2].name} {parts[2].exerciseCount}
-      </p>
+      <Part course={parts[0]} />
+      <Part course={parts[1]} />
+      <Part course={parts[2]} />
+      <Part course={parts[3]} />
+      <Part course={parts[4]} />
     </>
   );
 };
 
-const Total = ({ parts }: PartProps) => {
+
+
+const Total = ({ parts }: PartsProps) => {
   return (
     <>
       <p>
@@ -43,19 +117,39 @@ const Total = ({ parts }: PartProps) => {
 
 const App = () => {
   const courseName = "Half Stack application development";
-  const courseParts = [
+
+  const courseParts: CoursePart[] = [
     {
       name: "Fundamentals",
-      exerciseCount: 10
+      exerciseCount: 10,
+      description: "This is an awesome course part",
+      kind: "basic"
     },
     {
       name: "Using props to pass data",
-      exerciseCount: 7
+      exerciseCount: 7,
+      groupProjectCount: 3,
+      kind: "group"
+    },
+    {
+      name: "Basics of type Narrowing",
+      exerciseCount: 7,
+      description: "How to go from unknown to string",
+      kind: "basic"
     },
     {
       name: "Deeper type usage",
-      exerciseCount: 14
-    }
+      exerciseCount: 14,
+      description: "Confusing description",
+      backroundMaterial: "https://type-level-typescript.com/template-literal-types",
+      kind: "background"
+    },
+    {
+      name: "TypeScript in frontend",
+      exerciseCount: 10,
+      description: "a hard part",
+      kind: "basic",
+    },
   ];
 
   return (
