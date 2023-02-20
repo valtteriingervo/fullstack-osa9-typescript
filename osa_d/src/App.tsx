@@ -22,7 +22,12 @@ interface CoursePartBackround extends CoursePartBaseDesc {
   kind: "background"
 }
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackround;
+interface CoursePartSpecial extends CoursePartBaseDesc {
+  requirements: string[];
+  kind: "special"
+}
+
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackround | CoursePartSpecial;
 
 // Prop interfaces
 interface HeaderProps {
@@ -85,6 +90,18 @@ const Part = ({ course }: PartProps) => {
           </p>
         </div>
       )
+    case "special":
+      return (
+        <div>
+          <p>
+            <b>{course.name} {course.exerciseCount}</b>
+            <br></br>
+            <i>{course.description} </i>
+            <br></br>
+            {"required skills: "} {course.requirements.join(", ")}
+          </p>
+        </div>
+      )
     default:
       return assertNever(course);
   }
@@ -98,6 +115,7 @@ const Content = ({ parts }: PartsProps) => {
       <Part course={parts[2]} />
       <Part course={parts[3]} />
       <Part course={parts[4]} />
+      <Part course={parts[5]} />
     </>
   );
 };
@@ -150,6 +168,13 @@ const App = () => {
       description: "a hard part",
       kind: "basic",
     },
+    {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special"
+    }
   ];
 
   return (
