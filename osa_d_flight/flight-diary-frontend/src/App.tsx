@@ -65,19 +65,37 @@ const App = () => {
       <div>
         <form onSubmit={diaryEntryCreation}>
           date: <input
+            type="date"
             value={newDate}
             onChange={(event) => setNewDate(event.target.value)}
           />
           <br></br>
-          visibility: <input
-            value={newVisibility}
-            onChange={(event) => setNewVisibility(event.target.value)}
-          />
+          <div></div>
+          <div>
+            visibility:
+            great    <input type="radio" name="visibility"
+              onChange={() => setNewVisibility('great')} />
+            good    <input type="radio" name="visibility"
+              onChange={() => setNewVisibility('good')} />
+            ok <input type="radio" name="visibility"
+              onChange={() => setNewVisibility('ok')} />
+            poor <input type="radio" name="visibility"
+              onChange={() => setNewVisibility('poor')} />
+          </div>
           <br></br>
-          weather: <input
-            value={newWeather}
-            onChange={(event) => setNewWeather(event.target.value)}
-          />
+          <div>
+            weather:
+            sunny     <input type="radio" name="weather"
+              onChange={() => setNewWeather('sunny')} />
+            rainy    <input type="radio" name="weather"
+              onChange={() => setNewWeather('rainy')} />
+            cloudy <input type="radio" name="weather"
+              onChange={() => setNewWeather('clody')} />
+            stormy <input type="radio" name="weather"
+              onChange={() => setNewWeather('stormy')} />
+            windy <input type="radio" name="weather"
+              onChange={() => setNewWeather('windy')} />
+          </div>
           <br></br>
           comment: <input
             value={newComment}
