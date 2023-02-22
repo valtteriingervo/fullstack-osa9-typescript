@@ -1,13 +1,30 @@
+import axios from 'axios';
 import { useState, useEffect } from "react";
 import { DiaryEntry } from "./types";
 import { getAllDiaryEntries, createDiaryEntry } from './diaryService';
 
+const ErrorMessage = ({ errorMessage }: { errorMessage: string }) => {
+  const errorStyle = {
+    color: 'red',
+    fontSize: 22
+  }
+
+  return (
+    <div style={errorStyle}>
+      <p>{errorMessage}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([]);
+
   const [newDate, setNewDate] = useState('');
   const [newVisibility, setNewVisibility] = useState('');
   const [newWeather, setNewWeather] = useState('');
   const [newComment, setNewComment] = useState('');
+
+  const [errorMsg, setNewErrorMsg] = useState('');
 
   useEffect(() => {
     getAllDiaryEntries().then(data => {
@@ -17,6 +34,7 @@ const App = () => {
 
   const diaryEntryCreation = (event: React.SyntheticEvent) => {
     event.preventDefault()
+
     createDiaryEntry({
       date: newDate,
       weather: newWeather,
@@ -24,17 +42,26 @@ const App = () => {
       comment: newComment
     }).then(data => {
       setDiaryEntries(diaryEntries.concat(data))
-    })
 
-    setNewDate('')
-    setNewVisibility('')
-    setNewWeather('')
-    setNewComment('')
+      setNewDate('')
+      setNewVisibility('')
+      setNewWeather('')
+      setNewComment('')
+    })
+      .catch(error => {
+        if (axios.isAxiosError(error)) {
+          setNewErrorMsg(error.response?.data)
+          setTimeout(() => { setNewErrorMsg('') }, 5000)
+        } else {
+          console.error(error);
+        }
+      });
   };
 
   return (
     <div>
       <h1>Diary entries</h1>
+      <ErrorMessage errorMessage={errorMsg} />
       <div>
         <form onSubmit={diaryEntryCreation}>
           date: <input
