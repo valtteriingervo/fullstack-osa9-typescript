@@ -10,6 +10,6 @@ export const getAllDiaryEntries = () => {
 export const createDiaryEntry = (object: NewDiaryEntry) => {
   // The backend will give the diary entry an ID and turn in into DiaryEntry type
   return axios
-    .post<DiaryEntry>('http://localhost:3001/notes', object)
+    .post<DiaryEntry>('http://localhost:3001/api/diaries', object)
     .then(response => response.data)
 }
