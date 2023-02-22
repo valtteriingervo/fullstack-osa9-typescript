@@ -1,4 +1,4 @@
-import { NewPatientEntry, Gender } from "./types";
+import { NewPatientEntry, Gender, Entry } from "./types";
 
 // All the isX functions
 const isString = (text: unknown): text is string => {
@@ -64,13 +64,16 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
     'dateOfBirth' in object &&
     'ssn' in object &&
     'gender' in object &&
-    'occupation' in object) {
+    'occupation' in object &&
+    'entries' in object) {
     const newPatient: NewPatientEntry = {
       name: parseName(object.name),
       dateOfBirth: parseDate(object.dateOfBirth),
       ssn: parseSSN(object.ssn),
       gender: parseGender(object.gender),
-      occupation: parseOccupation(object.occupation)
+      occupation: parseOccupation(object.occupation),
+      // We will remove the type assertion during the next exercises
+      entries: object.entries as Entry[]
     };
 
     return newPatient;
