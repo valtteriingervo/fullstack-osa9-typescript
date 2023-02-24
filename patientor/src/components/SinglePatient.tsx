@@ -6,7 +6,6 @@ import patientService from "../services/patients"
 
 const SinglePatient = () => {
   const [patient, setPatient] = useState<Patient>();
-  // Dangerous type assertion
   let id = useParams().id
 
   useEffect(() => {

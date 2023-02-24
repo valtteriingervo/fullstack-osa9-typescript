@@ -53,6 +53,36 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
+// Check that a potential entry has one of the entry types
+// (Enough for exercise 9.22)
+const isEntry = (entry: unknown): entry is Entry => {
+  // Check that entry is an object
+  if (!entry || typeof entry !== 'object') {
+    return false;
+  }
+  // Check that entry has field of 'type'
+  if ('type' in entry && isString(entry.type)) {
+    // Check that type of entry matches one of the three possible ones
+    ["Hospital, OccupationalHealthcare, HealthCheck"].includes(entry.type);
+    return true;
+  }
+  return false;
+
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+  if (!Array.isArray(entries)) {
+    throw new Error('Incorrect or missing patient entry data');
+  }
+  const isEntryArray
+    = entries.map(entry => isEntry(entry));
+  if (isEntryArray.includes(false)) {
+    throw new Error('Incorrect or missing patient entry data');
+  }
+  // We can now safely assert entries as type Entry[]
+  return entries as Entry[];
+};
+
 // Final patient entry parser function
 const toNewPatientEntry = (object: unknown): NewPatientEntry => {
   if (!object || typeof object !== 'object') {
@@ -73,7 +103,7 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
       gender: parseGender(object.gender),
       occupation: parseOccupation(object.occupation),
       // We will remove the type assertion during the next exercises
-      entries: object.entries as Entry[]
+      entries: parseEntries(object.entries)
     };
 
     return newPatient;
